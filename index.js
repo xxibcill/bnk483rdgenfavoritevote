@@ -19,7 +19,7 @@ function printVote(VoteReceive) {
     console.log(`totalVote : ${totalVote}`);
 }
 
-const delayDuration = 300; // 30s refresh rate
+const delayDuration = 5000; // 5s refresh rate
 const fractor = new BigNumber("1000000000000000000");
 let VoteReceive = []
 
