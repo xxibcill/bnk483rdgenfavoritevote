@@ -1,6 +1,25 @@
 const puppeteer = require('puppeteer');
 const BigNumber = require('bignumber.js');
-const member = ["Earn","Earth","Eve","Fame","Grace","Hoop","Jaokhem","Kaofrang","Mean","Monet","Paeyah","Pampam","Pancake","Peak","Pim","Popper","Yayee","Yoghurt"];
+const member = [
+    "Earn",
+    "Earth",
+    "Eve",
+    "Fame",
+    "Grace",
+    "Hoop",
+    "Jaokhem",
+    "Kaofrang",
+    "Mean",
+    "Monet",
+    "Paeyah",
+    "Pampam",
+    "Pancake",
+    "Peak",
+    "Pim",
+    "Popper",
+    "Yayee",
+    "Yoghurt"
+];
 
 function getVote(index) {
     return `body > div.layout-container > main > section > div.card > div.card-body > div:nth-child(11) > span > div:nth-child(${2+(3*(index+1))})`;
@@ -33,7 +52,7 @@ async function getData(){
     // clear Vote before push
     VoteReceive.splice(0,VoteReceive.length)
     await page.waitForSelector(getVote(1))
-    for (let index = 0; index < 17; index++) {
+    for (let index = 0; index < member.length; index++) {
         let amount = await page.$(getVote(index))
         let value = await page.evaluate(el => el.textContent, amount)
         value = value.replace("(uint256) :","");
