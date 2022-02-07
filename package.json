@@ -1,0 +1,17 @@
+{
+  "name": "bnk",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bignumber.js": "^9.0.2",
+    "ethers": "^5.5.4",
+    "puppeteer": "^13.1.3",
+    "user-agents": "^1.0.920"
+  }
+}
