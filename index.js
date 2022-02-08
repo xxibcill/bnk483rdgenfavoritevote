@@ -36,6 +36,7 @@ function printVote(VoteReceive) {
     console.clear();
     console.table(temp);
     console.log(`totalVote : ${totalVote}`);
+    console.log(`Last Updated : ${new Date().toLocaleString()}`);
 }
 
 const delayDuration = 5000; // 5s refresh rate
