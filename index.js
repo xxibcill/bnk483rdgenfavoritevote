@@ -68,14 +68,11 @@ async function getData(){
     await browser.close();
 }
 
-async function main() {
-    setTimeout(async () => {
+(async () => {
+    await getData()
+    printVote(VoteReceive);
+    setInterval(async () => {
         await getData()
         printVote(VoteReceive);
-        await main();
     }, delayDuration)
-}
-
-(async () => {
-    await main();
 })();
