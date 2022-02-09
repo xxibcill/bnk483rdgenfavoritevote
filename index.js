@@ -35,22 +35,28 @@ function printVote(voteResult) {
     }
     console.clear();
     console.table(temp);
-    console.log(`Total Run : ${runCounter}`);
     if (previousTotalVote.comparedTo(0) > 0) {
-        const totalVoteDiff = totalVote.minus(previousTotalVote);
-        console.log(`Total Vote : ${totalVote} (+${totalVoteDiff.toFormat(3)})`);
+        const diff = totalVote.minus(previousTotalVote);
+        totalVoteDiff = diff.plus(totalVoteDiff);
+        console.log(`Total Vote : ${totalVote} (+${diff.toFormat(3)})`);
     } else {
         console.log(`Total Vote : ${totalVote}`);
     }
+    if (totalVoteDiff.comparedTo(0) > 0) {
+        console.log(`Total Run : ${runCounter} (+${totalVoteDiff.toFormat(3)})`);
+    } else {
+        console.log(`Total Run : ${runCounter}`);
+    }
     previousTotalVote = totalVote;
     if (previousUpdate !== null) {
-       console.log(`Previous Updated : ${previousUpdate.toLocaleString()}`);
+        console.log(`Previous Updated : ${previousUpdate.toLocaleString()}`);
     }
     console.log(`Last Updated : ${lastUpdate.toLocaleString()}`);
 }
 
 const delayDuration = 60000 * 10; // 10 minutes refresh rate
 const fractor = new BigNumber("1000000000000000000");
+let totalVoteDiff = new BigNumber(0);
 let previousTotalVote = new BigNumber(0);
 const previousVote = [];
 const lastVote = [];
