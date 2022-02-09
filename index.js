@@ -35,13 +35,20 @@ function printVote(VoteReceive) {
     }
     console.clear();
     console.table(temp);
+    console.log(`Total Run : ${runCounter}`);
     console.log(`totalVote : ${totalVote}`);
-    console.log(`Last Updated : ${new Date().toLocaleString()}`);
+    if (previousUpdate !== null) {
+       console.log(`Previous Updated : ${previousUpdate.toLocaleString()}`);
+    }
+    console.log(`Last Updated : ${lastUpdate.toLocaleString()}`);
 }
 
 const delayDuration = 5000; // 5s refresh rate
 const fractor = new BigNumber("1000000000000000000");
 let VoteReceive = []
+let previousUpdate = null;
+let lastUpdate = null;
+let runCounter = 0;
 
 async function getData(){
     const browser = await puppeteer.launch();
@@ -65,6 +72,11 @@ async function getData(){
     }
 
     VoteReceive.sort( (a, b) => {return b.voteAmount - a.voteAmount });
+    if (lastUpdate !== null) {
+        previousUpdate = lastUpdate;
+    }
+    lastUpdate = new Date();
+    runCounter++;
     await browser.close();
 }
 
