@@ -60,6 +60,7 @@ let totalVoteDiff = new BigNumber(0);
 let previousTotalVote = new BigNumber(0);
 const previousVote = [];
 const lastVote = [];
+const totalVote = [];
 const voteResult = [];
 let previousUpdate = null;
 let lastUpdate = null;
@@ -97,7 +98,9 @@ async function getData(){
                 name: el.name,
                 voteAmount: el.voteAmount,
                 voteDiff: "0.000",
+                totalVoteDiff: "0.000",
             };
+            totalVote.push(item);
             voteResult.push(item);
         }
     } else {
@@ -108,6 +111,7 @@ async function getData(){
                 name: el.name,
                 voteAmount: el.voteAmount,
                 voteDiff: "0.000",
+                totalVoteDiff: "0.000",
             };
             if (found !== undefined) {
                 const voteDiff = parseFloat(el.voteAmount) - parseFloat(found.voteAmount);
@@ -115,6 +119,13 @@ async function getData(){
                     found.voteAmount = el.voteAmount;
                 }
                 item.voteDiff = voteDiff.toFixed(3);
+                const total = totalVote.find((f) => f.name === el.name);
+                if (total !== undefined) {
+                    const oldTotalVoteDiff = parseFloat(total.totalVoteDiff);
+                    const newTotalVoteDiff = oldTotalVoteDiff + voteDiff;
+                    total.totalVoteDiff = newTotalVoteDiff.toFixed(3);
+                    item.totalVoteDiff = newTotalVoteDiff.toFixed(3);
+                }
             }
             voteResult.push(item);
         }
