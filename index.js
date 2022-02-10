@@ -28,8 +28,16 @@ function getVote(index) {
 function printVote(voteResult) {
     let temp = {};
     let totalVote = new BigNumber(0)
+    let previousVoteAmount = 0;
     for (let index = 1; index < voteResult.length + 1; index++) {
         const element = voteResult[index-1];
+        if (previousVoteAmount === 0) {
+            previousVoteAmount = element.voteAmount;
+        } else {
+            const rankDiff = parseFloat(previousVoteAmount) - parseFloat(element.voteAmount);
+            element.rankDiff = rankDiff.toFixed(3);
+            previousVoteAmount = element.voteAmount;
+        }
         temp[index] = element;
         totalVote = totalVote.plus(new BigNumber(element.voteAmount))
     }
@@ -97,6 +105,7 @@ async function getData(){
             const item = {
                 name: el.name,
                 voteAmount: el.voteAmount,
+                rankDiff: "0.000",
                 voteDiff: "0.000",
                 totalVoteDiff: "0.000",
             };
@@ -110,6 +119,7 @@ async function getData(){
             const item = {
                 name: el.name,
                 voteAmount: el.voteAmount,
+                rankDiff: "0.000",
                 voteDiff: "0.000",
                 totalVoteDiff: "0.000",
             };
