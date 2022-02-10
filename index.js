@@ -28,8 +28,16 @@ function getVote(index) {
 function printVote(voteResult) {
     let temp = {};
     let totalVote = new BigNumber(0)
+    let previousVoteAmount = 0;
     for (let index = 1; index < voteResult.length + 1; index++) {
         const element = voteResult[index-1];
+        if (previousVoteAmount === 0) {
+            previousVoteAmount = element.voteAmount;
+        } else {
+            const rankDiff = parseFloat(previousVoteAmount) - parseFloat(element.voteAmount);
+            element.rankDiff = rankDiff.toFixed(3);
+            previousVoteAmount = element.voteAmount;
+        }
         temp[index] = element;
         totalVote = totalVote.plus(new BigNumber(element.voteAmount))
     }
@@ -37,13 +45,13 @@ function printVote(voteResult) {
     console.table(temp);
     if (previousTotalVote.comparedTo(0) > 0) {
         const diff = totalVote.minus(previousTotalVote);
-        totalVoteDiff = diff.plus(totalVoteDiff);
+        totalVoteInc = diff.plus(totalVoteInc);
         console.log(`Total Vote : ${totalVote} (+${diff.toFormat(3)})`);
     } else {
         console.log(`Total Vote : ${totalVote}`);
     }
-    if (totalVoteDiff.comparedTo(0) > 0) {
-        console.log(`Total Run : ${runCounter} (+${totalVoteDiff.toFormat(3)})`);
+    if (totalVoteInc.comparedTo(0) > 0) {
+        console.log(`Total Run : ${runCounter} (+${totalVoteInc.toFormat(3)})`);
     } else {
         console.log(`Total Run : ${runCounter}`);
     }
@@ -56,10 +64,11 @@ function printVote(voteResult) {
 
 const delayDuration = 60000 * 10; // 10 minutes refresh rate
 const fractor = new BigNumber("1000000000000000000");
-let totalVoteDiff = new BigNumber(0);
+let totalVoteInc = new BigNumber(0);
 let previousTotalVote = new BigNumber(0);
 const previousVote = [];
 const lastVote = [];
+const totalVote = [];
 const voteResult = [];
 let previousUpdate = null;
 let lastUpdate = null;
@@ -96,8 +105,11 @@ async function getData(){
             const item = {
                 name: el.name,
                 voteAmount: el.voteAmount,
-                voteDiff: "0.000",
+                rankDiff: "0.000",
+                voteInc: "0.000",
+                totalVoteInc: "0.000",
             };
+            totalVote.push(item);
             voteResult.push(item);
         }
     } else {
@@ -107,14 +119,23 @@ async function getData(){
             const item = {
                 name: el.name,
                 voteAmount: el.voteAmount,
-                voteDiff: "0.000",
+                rankDiff: "0.000",
+                voteInc: "0.000",
+                totalVoteInc: "0.000",
             };
             if (found !== undefined) {
-                const voteDiff = parseFloat(el.voteAmount) - parseFloat(found.voteAmount);
-                if (voteDiff > 0) {
+                const voteInc = parseFloat(el.voteAmount) - parseFloat(found.voteAmount);
+                if (voteInc > 0) {
                     found.voteAmount = el.voteAmount;
                 }
-                item.voteDiff = voteDiff.toFixed(3);
+                item.voteInc = voteInc.toFixed(3);
+                const total = totalVote.find((f) => f.name === el.name);
+                if (total !== undefined) {
+                    const oldTotalVoteInc = parseFloat(total.totalVoteInc);
+                    const newTotalVoteInc = oldTotalVoteInc + voteInc;
+                    total.totalVoteInc = newTotalVoteInc.toFixed(3);
+                    item.totalVoteInc = newTotalVoteInc.toFixed(3);
+                }
             }
             voteResult.push(item);
         }
