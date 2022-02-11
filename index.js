@@ -77,7 +77,9 @@ let lastUpdate = null;
 let runCounter = 0;
 
 async function getData() {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
     const page = await browser.newPage();
     var userAgent = require("user-agents");
     await page.setUserAgent(userAgent.toString());
