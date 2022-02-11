@@ -28,7 +28,7 @@ function getVote(index) {
 }
 
 function printVote(voteResult) {
-    let temp = {};
+    const temp = {};
     let totalVote = new BigNumber(0);
     let previousVoteAmount = 0;
     for (let index = 1; index < voteResult.length + 1; index++) {
@@ -88,7 +88,7 @@ async function getData() {
     voteResult.length = 0;
     await page.waitForSelector(getVote(1));
     for (let index = 0; index < member.length; index++) {
-        let amount = await page.$(getVote(index));
+        const amount = await page.$(getVote(index));
         let value = await page.evaluate((el) => el.textContent, amount);
         value = value.replace("(uint256) :", "");
         value = new BigNumber(value);
@@ -103,7 +103,7 @@ async function getData() {
     });
     if (previousVote.length === 0) {
         // no previous vote
-        for (let el of lastVote) {
+        for (const el of lastVote) {
             // save vote data
             previousVote.push(el);
             const item = {
@@ -118,7 +118,7 @@ async function getData() {
         }
     } else {
         // find the diff of vote result
-        for (let el of lastVote) {
+        for (const el of lastVote) {
             const found = previousVote.find((f) => f.name === el.name);
             const item = {
                 name: el.name,
