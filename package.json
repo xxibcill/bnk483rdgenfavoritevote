@@ -12,7 +12,13 @@
   "dependencies": {
     "bignumber.js": "^9.0.2",
     "ethers": "^5.5.4",
-    "puppeteer": "^13.2.0",
-    "user-agents": "^1.0.922"
+    "puppeteer": "^13.3.1",
+    "user-agents": "^1.0.923"
+  },
+  "devDependencies": {
+    "eslint": "^8.8.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "2.5.1"
   }
 }
