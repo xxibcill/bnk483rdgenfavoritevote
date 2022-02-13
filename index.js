@@ -62,6 +62,9 @@ function printVote(voteResult) {
         console.log(`Previous Updated : ${previousUpdate.toLocaleString()}`);
     }
     console.log(`Last Updated : ${lastUpdate.toLocaleString()}`);
+    if (isFinished === "true") {
+        console.log("Poll is finished!");
+    }
 }
 
 const delayDuration = 60000 * 10; // 10 minutes refresh rate
@@ -75,6 +78,7 @@ const voteResult = [];
 let previousUpdate = null;
 let lastUpdate = null;
 let runCounter = 0;
+let isFinished = "";
 
 async function getData() {
     const browser = await puppeteer.launch({
@@ -89,6 +93,11 @@ async function getData() {
     lastVote.length = 0;
     voteResult.length = 0;
     await page.waitForSelector(getVote(1));
+    // check for isFinished data
+    const isFinishedElement = await page.$(
+        "body > div.layout-container > main > section > div.card > div.card-body > div:nth-child(16) > span"
+    );
+    isFinished = await page.evaluate((el) => el.textContent, isFinishedElement);
     for (let index = 0; index < member.length; index++) {
         const amount = await page.$(getVote(index));
         let value = await page.evaluate((el) => el.textContent, amount);
@@ -158,7 +167,9 @@ async function getData() {
     await getData();
     printVote(voteResult);
     setInterval(async () => {
-        await getData();
+        if (isFinished !== "true") {
+            await getData();
+        }
         printVote(voteResult);
     }, delayDuration);
 })();
