@@ -11,7 +11,6 @@
   "license": "ISC",
   "dependencies": {
     "bignumber.js": "^9.0.2",
-    "ethers": "^5.5.4",
     "puppeteer": "^13.3.1",
     "user-agents": "^1.0.925"
   },
